@@ -6,8 +6,14 @@ cask "ghostty"
 cask "bitwarden"
 
 brew "git"
+brew "node"
+brew "kubectl"
+brew "k9s"
+brew "bitwarden-cli"
 
 # Appwrite
 
 cask "linear-linear"
 cask "cloudflare-warp"
+
+brew "doctl"
