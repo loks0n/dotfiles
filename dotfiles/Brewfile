@@ -1,0 +1,13 @@
+# Personal
+
+cask "google-chrome"
+cask "zed"
+cask "ghostty"
+cask "bitwarden"
+
+brew "git"
+
+# Appwrite
+
+cask "linear-linear"
+cask "cloudflare-warp"
