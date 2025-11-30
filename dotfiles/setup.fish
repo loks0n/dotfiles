@@ -4,9 +4,8 @@ env NONINTERACTIVE=1 brew bundle install
 
 # Bare repository settings
 echo ">>> Configuring bare repo untracked settings..."
-if test -d "$HOME/.dotfiles"
-    /usr/bin/git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" config status.showUntrackedFiles no
-end
+git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" config status.showUntrackedFiles no
+config remote set-url origin git@github.com:loks0n/dotfiles.git
 
 # Setup SSH
 set keyfile "$HOME/.ssh/id_ed25519"
