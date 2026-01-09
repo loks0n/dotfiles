@@ -9,8 +9,8 @@
 {
   "terminal": {
     "shell": {
-      "program": "fish"
-    }
+      "program": "fish",
+    },
   },
   "icon_theme": "Zed (Default)",
   "ui_font_size": 16,
@@ -18,6 +18,69 @@
   "theme": {
     "mode": "system",
     "light": "Ayu Light",
-    "dark": "Ayu Dark"
-  }
+    "dark": "Ayu Dark",
+  },
+  "file_types": {
+    "Helm": [
+      "**/helm/**/.yaml",
+      "**/helm/**/.yml",
+      "**/templates/**/*.tpl",
+      "**/templates/**/*.yaml",
+      "**/templates/**/*.yml",
+      "**/helmfile.d/**/*.yaml",
+      "**/helmfile.d/**/*.yml",
+      "**/values*.yaml",
+    ],
+    "GitHub Actions": [".github/workflows/*.yml", ".github/workflows/*.yaml"],
+  },
+  "languages": {
+    "PHP": {
+      "tab_size": 4,
+      "hard_tabs": false,
+      "format_on_save": "off",
+      "language_servers": ["intelephense", "!phpactor", "..."],
+    },
+    "JSON": {
+      "format_on_save": "off",
+    },
+  },
+  "lsp": {
+    "intelephense": {
+      "settings": {
+        "stubs": [
+          "Core",
+          "standard",
+          "SPL",
+          "Reflection",
+          "date",
+          "json",
+          "pcre",
+          "hash",
+          "filter",
+          "ctype",
+          "mbstring",
+          "mysqli",
+          "PDO",
+          "pgsql",
+          "sqlite3",
+          "mongodb",
+          "redis",
+          "random",
+          "curl",
+          "openssl",
+          "session",
+          "gd",
+          "imagick",
+          "xml",
+          "dom",
+          "SimpleXML",
+          "zip",
+          "fileinfo",
+          "sockets",
+          "yaml",
+          "maxminddb",
+        ],
+      },
+    },
+  },
 }
