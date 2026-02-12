@@ -62,6 +62,7 @@
           "mysqli",
           "PDO",
           "pgsql",
+          "xmlwriter",
           "sqlite3",
           "mongodb",
           "redis",
