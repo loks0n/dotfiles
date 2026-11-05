@@ -1,5 +1,7 @@
 set -g fish_greeting
 
+fish_add_path --global --move --prepend /opt/homebrew/bin /opt/homebrew/sbin $HOME/.local/bin $HOME/go/bin
+
 # aliases
 alias lg="lazygit log"
 alias k="kubectl"
@@ -29,4 +31,4 @@ source ~/.orbstack/shell/init2.fish 2>/dev/null || :
 
 # bun
 set --export BUN_INSTALL "$HOME/.bun"
-set --export PATH $BUN_INSTALL/bin $PATH
+fish_add_path --global $BUN_INSTALL/bin

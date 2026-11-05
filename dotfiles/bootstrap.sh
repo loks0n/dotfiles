@@ -1,43 +1,37 @@
 #!/usr/bin/env bash
 set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")"
 
-need_sudo() {
-    if [[ $EUID -ne 0 ]]; then
-        sudo true
-    fi
-}
-
-# Xcode
-echo ">>> Ensuring Xcode command-line tools installed..."
-xcode-select -p >/dev/null 2>&1 || xcode-select --install >/dev/null 2>&1 || true
-
-# Homebrew
-if ! command -v brew >/dev/null 2>&1; then
-    echo ">>> Installing Homebrew..."
-    NONINTERACTIVE=1 \
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+if ! xcode-select -p >/dev/null 2>&1; then
+    xcode-select --install
+    echo "Finish installing Xcode command-line tools, then run this script again." >&2
+    exit 1
 fi
 
-if [ -d /opt/homebrew/bin ]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [ -d /usr/local/bin ]; then
-    eval "$(/usr/local/bin/brew shellenv)"
+brew_bin=/opt/homebrew/bin/brew
+[[ $(uname -m) == arm64 ]] || brew_bin=/usr/local/bin/brew
+if [[ ! -x $brew_bin ]]; then
+    installer="$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$installer"
+fi
+brew_env="$("$brew_bin" shellenv)"
+eval "$brew_env"
+
+export PATH="$HOME/.cargo/bin:$PATH"
+if ! command -v rustup >/dev/null 2>&1; then
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+fi
+rustup toolchain install stable
+RUSTUP_TOOLCHAIN=stable brew bundle install --file="$PWD/Brewfile"
+
+git --git-dir="$HOME/.dotfiles" --work-tree="$HOME" config status.showUntrackedFiles no
+
+fish_bin="$(command -v fish)"
+if ! grep -Fxq "$fish_bin" /etc/shells; then
+    printf '%s\n' "$fish_bin" | sudo tee -a /etc/shells >/dev/null
+fi
+if [[ $SHELL != "$fish_bin" ]]; then
+    sudo chsh -s "$fish_bin" "$USER"
 fi
 
-# Fish
-echo ">>> Installing fish via Homebrew..."
-brew install fish >/dev/null 2>&1 || true
-
-echo ">>> Ensuring fish is in /etc/shells..."
-need_sudo
-if ! grep -q "$(command -v fish)" /etc/shells; then
-    echo "$(command -v fish)" | sudo tee -a /etc/shells >/dev/null
-fi
-
-echo ">>> Setting fish as default shell..."
-need_sudo
-sudo chsh -s "$(command -v fish)" "$USER"
-
-# Setup
-echo ">>> Bootstrap complete. Launching setup..."
-fish ./setup.fish
+echo "Setup complete. Open a new terminal, then run gh auth login and gh auth setup-git."
